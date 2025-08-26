@@ -1,9 +1,7 @@
-import emailjs from 'emailjs-com';
+// src/lib/emailService.ts
+import emailjs from "@emailjs/browser";
 
-// Initialize EmailJS with your user ID
-emailjs.init("ei0M6UgMq2pVvKGNg");
-
-// Email service configuration and utilities
+// Types
 export interface EmailData {
   name: string;
   email: string;
@@ -14,81 +12,83 @@ export interface EmailData {
 export interface EmailJSConfig {
   serviceId: string;
   templateId: string;
-  userId: string;
+  publicKey: string;
 }
 
-// EmailJS configuration with your provided credentials
+// ✅ EmailJS configuration with your provided credentials
 export const emailConfig: EmailJSConfig = {
-  serviceId: 'service_zcs78oe',
-  templateId: 'template_99niu0d',
-  userId: 'ei0M6UgMq2pVvKGNg'
+  serviceId: "service_zcs78oe",
+  templateId: "template_99niu0d",
+  publicKey: "ei0M6UgMq2pVvKGNg",
 };
 
+// ✅ Send Email Function
 export const sendEmail = async (data: EmailData): Promise<boolean> => {
   try {
-    console.log('=== EMAIL SERVICE DEBUG ===');
-    console.log('EmailJS Config:', emailConfig);
-    console.log('Input data:', data);
-    
-    // Prepare template parameters - using common EmailJS template variable names
+    console.log("=== EMAIL SERVICE DEBUG ===");
+    console.log("EmailJS Config:", emailConfig);
+    console.log("Input data:", data);
+
     const templateParams = {
       from_name: data.name,
       from_email: data.email,
       subject: data.subject,
       message: data.message,
-      to_name: 'Sidharth',
-      to_email: 'sidharthkardam287@gmail.com',
+      to_name: "Sidharth",
+      to_email: "sidharthkardam287@gmail.com",
       reply_to: data.email,
-      // Additional common template variables that might be expected
+      // Extra keys in case template expects them
       user_name: data.name,
       user_email: data.email,
+      user_subject: data.subject,
       user_message: data.message,
-      user_subject: data.subject
     };
 
-    console.log('Sending email with params:', {
+    console.log("Sending email with params:", {
       service_id: emailConfig.serviceId,
       template_id: emailConfig.templateId,
-      user_id: emailConfig.userId,
-      template_params: templateParams
+      public_key: emailConfig.publicKey,
+      template_params: templateParams,
     });
 
     const result = await emailjs.send(
       emailConfig.serviceId,
       emailConfig.templateId,
       templateParams,
-      emailConfig.userId
+      emailConfig.publicKey
     );
 
-    console.log('Email sent successfully:', result);
+    console.log("EmailJS result:", result);
+
+    // EmailJS returns { status: 200, text: "OK" } on success
     return result.status === 200;
   } catch (error) {
-    console.error('Error sending email:', error);
-    throw error; // Re-throw to let the component handle it
+    console.error("EmailJS error:", error);
+    throw error; // let component handle UI
   }
 };
 
-// Validate email format
+// ✅ Email validation
 export const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 };
 
-// Sanitize input data
+// ✅ Input sanitization (prevent XSS)
 export const sanitizeInput = (input: string): string => {
-  return input.trim().replace(/[<>]/g, '');
+  return input.trim().replace(/[<>]/g, "");
 };
 
-// Rate limiting helper (simple client-side implementation)
+// ✅ Simple rate limiter (1-minute cooldown)
 export const checkRateLimit = (): boolean => {
-  const lastSubmission = localStorage.getItem('lastEmailSubmission');
+  const lastSent = localStorage.getItem("lastEmailSubmission");
   const now = Date.now();
-  const cooldownPeriod = 60000; // 1 minute cooldown
+  const cooldown = 60000; // 1 min
 
-  if (lastSubmission && (now - parseInt(lastSubmission)) < cooldownPeriod) {
+  if (lastSent && now - parseInt(lastSent, 10) < cooldown) {
     return false;
   }
 
-  localStorage.setItem('lastEmailSubmission', now.toString());
+  localStorage.setItem("lastEmailSubmission", now.toString());
   return true;
 };
