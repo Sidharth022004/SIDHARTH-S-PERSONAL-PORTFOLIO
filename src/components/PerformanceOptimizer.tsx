@@ -4,19 +4,7 @@ const PerformanceOptimizer = () => {
   useEffect(() => {
     // Preload critical resources
     const preloadCriticalResources = () => {
-      const criticalImages = [
-        '/lovable-uploads/c45d782c-2e07-41b2-877f-69e24d79b8f8.png',
-        '/lovable-uploads/814754c1-29ce-4604-8716-b890594dded3.png',
-        '/lovable-uploads/4a7b4553-2938-4dd1-aea7-73733ae61ded.png'
-      ];
-
-      criticalImages.forEach(src => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = src;
-        document.head.appendChild(link);
-      });
+      // No critical images to preload
     };
 
     // Optimize third-party scripts

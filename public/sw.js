@@ -1,17 +1,17 @@
 // Service Worker for caching and performance optimization
 
-const CACHE_NAME = 'sidharth-portfolio-v1';
-const STATIC_CACHE = 'static-v1';
-const DYNAMIC_CACHE = 'dynamic-v1';
+const CACHE_NAME = 'sidharth-portfolio-v2';
+const STATIC_CACHE = 'static-v2';
+const DYNAMIC_CACHE = 'dynamic-v2';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/lovable-uploads/814754c1-29ce-4604-8716-b890594dded3.png',
-  '/lovable-uploads/c45d782c-2e07-41b2-877f-69e24d79b8f8.png',
-  '/lovable-uploads/4a7b4553-2938-4dd1-aea7-73733ae61ded.png'
+  '/favicon.ico',
+  // Add other static assets that should be cached
+  // CSS and JS files will be added dynamically
 ];
 
 // Install event - cache static assets
@@ -62,12 +62,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle static assets
-  if (STATIC_ASSETS.includes(url.pathname)) {
+  // Handle static assets (CSS, JS, images)
+  if (request.url.match(/\.(css|js|png|jpg|jpeg|gif|svg|ico|webp)$/)) {
     event.respondWith(
-      caches.match(request)
-        .then((response) => {
-          return response || fetch(request);
+      caches.open(STATIC_CACHE)
+        .then(cache => {
+          return cache.match(request)
+            .then(response => {
+              // Cache hit - return response
+              if (response) {
+                return response;
+              }
+              
+              // Cache miss - fetch and cache
+              return fetch(request)
+                .then(networkResponse => {
+                  // Check if we received a valid response
+                  if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                    return networkResponse;
+                  }
+                  
+                  // Clone the response and put it in cache
+                  const responseToCache = networkResponse.clone();
+                  cache.put(request, responseToCache);
+                  
+                  return networkResponse;
+                });
+            });
         })
     );
     return;
@@ -119,8 +140,8 @@ self.addEventListener('push', (event) => {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: '/lovable-uploads/814754c1-29ce-4604-8716-b890594dded3.png',
-      badge: '/lovable-uploads/814754c1-29ce-4604-8716-b890594dded3.png',
+      icon: '/favicon.ico',
+      badge: '/favicon.ico',
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),

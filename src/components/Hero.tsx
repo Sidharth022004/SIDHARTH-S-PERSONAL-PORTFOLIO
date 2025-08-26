@@ -9,8 +9,6 @@ interface HeroProps {
 
 const Hero = ({ scrollToSection }: HeroProps) => {
   const { t } = useLanguage();
-  const vantaRef = useRef<HTMLDivElement>(null);
-  const vantaEffect = useRef<any>(null);
   
   const taglines = [
     t('hero.tagline1'),
@@ -21,81 +19,6 @@ const Hero = ({ scrollToSection }: HeroProps) => {
 
   const [currentTagline, setCurrentTagline] = React.useState(0);
 
-  // Initialize Vanta.js topology background
-  useEffect(() => {
-    if (!vantaRef.current || vantaEffect.current) return;
-
-    const loadVanta = async () => {
-      try {
-        // Load p5.js first
-        if (!(window as any).p5) {
-          const p5Script = document.createElement('script');
-          p5Script.src = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js';
-          p5Script.async = true;
-          document.head.appendChild(p5Script);
-
-          await new Promise((resolve, reject) => {
-            p5Script.onload = resolve;
-            p5Script.onerror = reject;
-            setTimeout(reject, 5000); // 5 second timeout
-          });
-        }
-
-        // Small delay to ensure p5 is fully loaded
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Load Vanta topology
-        if (!(window as any).VANTA) {
-          const vantaScript = document.createElement('script');
-          vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js';
-          vantaScript.async = true;
-          document.head.appendChild(vantaScript);
-
-          await new Promise((resolve, reject) => {
-            vantaScript.onload = resolve;
-            vantaScript.onerror = reject;
-            setTimeout(reject, 5000); // 5 second timeout
-          });
-        }
-
-        // Small delay to ensure Vanta is fully loaded
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Initialize Vanta effect
-        if ((window as any).VANTA?.TOPOLOGY && vantaRef.current) {
-          vantaEffect.current = (window as any).VANTA.TOPOLOGY({
-            el: vantaRef.current,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            backgroundColor: 0x222222,
-            color: 0x89964e
-          });
-          console.log('Vanta topology initialized successfully');
-        }
-      } catch (error) {
-        console.error('Failed to load Vanta.js:', error);
-      }
-    };
-
-    loadVanta();
-
-    return () => {
-      if (vantaEffect.current) {
-        try {
-          vantaEffect.current.destroy();
-        } catch (error) {
-          console.error('Error destroying Vanta effect:', error);
-        }
-        vantaEffect.current = null;
-      }
-    };
-  }, []);
-
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTagline((prev) => (prev + 1) % taglines.length);
@@ -105,15 +28,6 @@ const Hero = ({ scrollToSection }: HeroProps) => {
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20">
-      {/* Vanta.js Topology Background */}
-      <div 
-        ref={vantaRef}
-        className="absolute inset-0 opacity-30 dark:opacity-50"
-      />
-      
-      {/* Minimal overlay to maintain text readability */}
-      <div className="absolute inset-0 bg-white/20 dark:bg-black/20" />
-      
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -146,20 +60,20 @@ const Hero = ({ scrollToSection }: HeroProps) => {
       </div>
 
       <div className="relative z-10 text-center text-foreground px-4 max-w-4xl mx-auto">
-        <motion.h1 
+        <motion.h1
           className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {t('hero.greeting')}{' '}
-          <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
             {t('hero.name')}
           </span>
         </motion.h1>
 
         {/* Dynamic Tagline */}
-        <motion.div 
+        <motion.div
           className="text-2xl md:text-3xl mb-4 h-12 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -177,7 +91,7 @@ const Hero = ({ scrollToSection }: HeroProps) => {
           </motion.span>
         </motion.div>
 
-        <motion.p 
+        <motion.p
           className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed text-muted-foreground"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -187,7 +101,7 @@ const Hero = ({ scrollToSection }: HeroProps) => {
         </motion.p>
 
         {/* Enhanced Stats Row */}
-        <motion.div 
+        <motion.div
           className="flex flex-wrap justify-center gap-8 mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -207,7 +121,7 @@ const Hero = ({ scrollToSection }: HeroProps) => {
           </div>
         </motion.div>
         
-        <motion.div 
+        <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -234,7 +148,7 @@ const Hero = ({ scrollToSection }: HeroProps) => {
         </motion.div>
 
         {/* Enhanced Scroll Indicator */}
-        <motion.div 
+        <motion.div
           className="flex flex-col items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -256,4 +170,4 @@ const Hero = ({ scrollToSection }: HeroProps) => {
   );
 };
 
-export default Hero;
+export default Hero; 

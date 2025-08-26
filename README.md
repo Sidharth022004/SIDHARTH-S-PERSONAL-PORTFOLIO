@@ -1,56 +1,10 @@
-# Welcome to your Lovable project
+# Sidharth's Portfolio
 
-## Project info
+## About this Project
 
-**URL**: https://lovable.dev/projects/abe61646-3925-4cc2-a4ac-2c8366bd6d12
+This is a personal portfolio website built with modern web technologies to showcase my skills, projects, and experience as a software developer.
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/abe61646-3925-4cc2-a4ac-2c8366bd6d12) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Technologies Used
 
 This project is built with:
 
@@ -60,14 +14,70 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Getting Started
 
-Simply open [Lovable](https://lovable.dev/projects/abe61646-3925-4cc2-a4ac-2c8366bd6d12) and click on Share -> Publish.
+To run this project locally:
 
-## Can I connect a custom domain to my Lovable project?
+1. Clone this repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Yes, you can!
+The application will be available at http://localhost:8080
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Building for Production
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+To create a production build:
+
+```bash
+npm run build
+```
+
+To preview the production build:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+This portfolio can be deployed to any static hosting service like Netlify, Vercel, or GitHub Pages.
+
+### GitHub Pages Deployment
+
+This repository is configured with GitHub Actions for automatic deployment to GitHub Pages:
+
+1. Any push to the `main` branch will trigger the CI/CD pipeline
+2. The workflow will run tests, build the project, and deploy to GitHub Pages
+3. Visit `https://[your-username].github.io/[repository-name]/` to view your deployed portfolio
+
+For detailed information about the CI/CD setup, see [README_CICD.md](README_CICD.md).
+
+### Manual Deployment
+
+To manually deploy to GitHub Pages:
+
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+2. Deploy using GitHub CLI or manually push the `dist` folder to the `gh-pages` branch
+
+## Customization
+
+To personalize this portfolio:
+
+1. Update the content in the `src` directory
+2. Replace placeholder images with your own
+3. Update the contact information in the contact section
+4. Add your own projects to the projects section
+5. Customize the styling to match your personal brand
+
+## Contributing
+
+Feel free to fork this project and customize it for your own portfolio. If you have suggestions for improvements, please open an issue or submit a pull request.

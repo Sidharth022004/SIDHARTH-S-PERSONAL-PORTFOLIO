@@ -57,7 +57,7 @@ const About = () => {
           >
             <div className="relative z-10">
               <LazyImage
-                src="/lovable-uploads/c45d782c-2e07-41b2-877f-69e24d79b8f8.png"
+                src="/placeholder.svg"
                 alt="Sidharth - Software Engineer"
                 className="w-full max-w-md mx-auto rounded-2xl shadow-2xl ring-4 ring-blue-500/20"
                 width={400}
@@ -129,8 +129,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 p-6 rounded-xl hover:shadow-xl transition-all duration-300 text-center group border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600"
-             className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl hover:shadow-xl transition-all duration-300 text-center group border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300/70 dark:hover:border-blue-600/70 hover:bg-white dark:hover:bg-gray-800"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl hover:shadow-xl transition-all duration-300 text-center group border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300/70 dark:hover:border-blue-600/70 hover:bg-white dark:hover:bg-gray-800"
               whileHover={{ y: -5, scale: 1.02 }}
             >
               <div className="text-blue-600 dark:text-blue-400 mb-4 flex justify-center group-hover:scale-110 transition-transform duration-300 bg-blue-50/70 dark:bg-blue-900/20 w-12 h-12 rounded-full items-center mx-auto group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30">

@@ -1,5 +1,8 @@
 import emailjs from 'emailjs-com';
 
+// Initialize EmailJS with your user ID
+emailjs.init("ei0M6UgMq2pVvKGNg");
+
 // Email service configuration and utilities
 export interface EmailData {
   name: string;
