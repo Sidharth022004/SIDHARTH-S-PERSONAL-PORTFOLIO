@@ -91,4 +91,4 @@ export const checkRateLimit = (): boolean => {
 
   localStorage.setItem('lastEmailSubmission', now.toString());
   return true;
-};   fix it and give full version 
+};
