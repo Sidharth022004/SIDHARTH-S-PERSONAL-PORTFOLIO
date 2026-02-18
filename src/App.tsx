@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -9,7 +10,16 @@ import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
+import AIChatbot from './components/AIChatbot';
 import { useLanguage } from './contexts/LanguageContext';
+
+// Import separate pages
+import AboutPage from './pages/About';
+import ProjectsPage from './pages/Projects';
+import CVPage from './pages/CV';
+import FAQPage from './pages/FAQ';
+import ContactPage from './pages/Contact';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -45,13 +55,13 @@ const App = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 100;
-      
+
       Object.entries(sectionRefs).forEach(([sectionId, ref]) => {
         const section = ref.current;
         if (section) {
           const sectionTop = section.offsetTop;
           const sectionHeight = section.offsetHeight;
-          
+
           if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
             setActiveSection(sectionId);
           }
@@ -61,7 +71,7 @@ const App = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, );
+  },);
 
   // Apply dark mode class to body
   useEffect(() => {
@@ -73,47 +83,65 @@ const App = () => {
   }, [isDarkMode]);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      <Header 
-        isDarkMode={isDarkMode} 
-        toggleDarkMode={toggleDarkMode} 
-        activeSection={activeSection}
-        scrollToSection={scrollToSection}
-      />
-      
-      <main>
-        <div ref={sectionRefs.home}>
-          <Hero scrollToSection={scrollToSection} />
-        </div>
-        
-        <div ref={sectionRefs.about}>
-          <About />
-        </div>
-        
-        <div ref={sectionRefs.projects}>
-          <Projects />
-        </div>
-        
-        <div ref={sectionRefs.cv}>
-          <CV />
-        </div>
-        
-        <div ref={sectionRefs.faq}>
-          <FAQ />
-        </div>
-        
-        <div ref={sectionRefs.testimonials}>
-          <Testimonials />
-        </div>
-        
-        <div ref={sectionRefs.contact}>
-          <Contact />
-        </div>
-      </main>
-      
-      <Footer />
-      <BackToTop />
-    </div>
+    <Router>
+      <AIChatbot />
+      <Routes>
+        {/* Landing Page - keeping original content unchanged */}
+        <Route path="/" element={
+          <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+            <Header
+              isDarkMode={isDarkMode}
+              toggleDarkMode={toggleDarkMode}
+              activeSection={activeSection}
+              scrollToSection={scrollToSection}
+            />
+
+            <main>
+              <div ref={sectionRefs.home}>
+                <Hero scrollToSection={scrollToSection} />
+              </div>
+
+              <div ref={sectionRefs.about}>
+                <About />
+              </div>
+
+              <div ref={sectionRefs.projects}>
+                <Projects />
+              </div>
+
+              <div ref={sectionRefs.cv}>
+                <CV />
+              </div>
+
+              <div ref={sectionRefs.faq}>
+                <FAQ />
+              </div>
+
+              <div ref={sectionRefs.testimonials}>
+                <Testimonials />
+              </div>
+
+              <div ref={sectionRefs.contact}>
+                <Contact />
+              </div>
+            </main>
+
+            <Footer />
+            <BackToTop />
+          </div>
+        } />
+
+        {/* Separate Pages */}
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/cv" element={<CVPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 };
 
