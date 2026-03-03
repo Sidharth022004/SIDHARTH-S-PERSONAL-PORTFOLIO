@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowDown, Sparkles, Code, Database, Palette } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDarkMode } from '../hooks/useDarkMode';
+import * as THREE from 'three';
+import TOPOLOGY from 'vanta/dist/vanta.topology.min';
 
 interface HeroProps {
   scrollToSection: (sectionId: string) => void;
@@ -9,7 +12,10 @@ interface HeroProps {
 
 const Hero = ({ scrollToSection }: HeroProps) => {
   const { t } = useLanguage();
-  
+  const vantaRef = useRef<HTMLDivElement>(null);
+  const vantaEffect = useRef<any>(null);
+  const isDarkMode = useDarkMode();
+
   const taglines = [
     t('hero.tagline1'),
     t('hero.tagline2'),
@@ -26,38 +32,45 @@ const Hero = ({ scrollToSection }: HeroProps) => {
     return () => clearInterval(interval);
   }, [taglines.length]);
 
+  useEffect(() => {
+    if (!vantaEffect.current && vantaRef.current) {
+      vantaEffect.current = TOPOLOGY({
+        el: vantaRef.current,
+        THREE: THREE,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: isDarkMode ? 0x60a5fa : 0x3b82f6,
+        backgroundColor: isDarkMode ? 0x111827 : 0xffffff
+      });
+    }
+    return () => {
+      if (vantaEffect.current) {
+        vantaEffect.current.destroy();
+        vantaEffect.current = null;
+      }
+    };
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    if (vantaEffect.current) {
+      vantaEffect.current.setOptions({
+        color: isDarkMode ? 0x60a5fa : 0x3b82f6,
+        backgroundColor: isDarkMode ? 0x111827 : 0xffffff
+      });
+    }
+  }, [isDarkMode]);
+
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-20 left-10 text-primary/20"
-          animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-        >
-          <Code size={32} />
-        </motion.div>
-        <motion.div
-          className="absolute bottom-32 right-20 text-primary/20"
-          animate={{ y: [10, -10, 10], rotate: [360, 180, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        >
-          <Database size={28} />
-        </motion.div>
-        <motion.div
-          className="absolute top-1/3 right-10 text-primary/20"
-          animate={{ y: [-15, 15, -15], x: [-5, 5, -5] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Palette size={24} />
-        </motion.div>
-        <div className="absolute top-20 left-1/4 text-primary/30">
-          <Sparkles size={24} />
-        </div>
-        <div className="absolute bottom-20 left-1/3 text-primary/30">
-          <Sparkles size={18} />
-        </div>
-      </div>
+    <section
+      id="home"
+      ref={vantaRef}
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+    >
 
       <div className="relative z-10 text-center text-foreground px-4 max-w-4xl mx-auto">
         <motion.h1
