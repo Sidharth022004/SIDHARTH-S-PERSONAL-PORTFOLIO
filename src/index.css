@@ -10,13 +10,25 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .nav-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 50;
+  }
+
+  #home {
+    position: relative;
+  }
+
+  #home canvas {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 

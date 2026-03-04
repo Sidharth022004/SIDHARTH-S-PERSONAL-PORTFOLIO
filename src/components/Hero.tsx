@@ -69,8 +69,10 @@ const Hero = ({ scrollToSection }: HeroProps) => {
     <section
       id="home"
       ref={vantaRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 w-full"
+      style={{ position: 'relative', backgroundColor: isDarkMode ? '#111827' : '#ffffff' }}
     >
+      <div className="absolute inset-0 pointer-events-none" />
 
       <div className="relative z-10 text-center text-foreground px-4 max-w-4xl mx-auto">
         <motion.h1
