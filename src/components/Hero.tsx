@@ -3,8 +3,6 @@ import { ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useDarkMode } from '../hooks/useDarkMode';
-import * as THREE from 'three';
-import TOPOLOGY from 'vanta/dist/vanta.topology.min';
 
 interface HeroProps {
   scrollToSection: (sectionId: string) => void;
@@ -33,21 +31,42 @@ const Hero = ({ scrollToSection }: HeroProps) => {
   }, [taglines.length]);
 
   useEffect(() => {
-    if (!vantaEffect.current && vantaRef.current) {
-      vantaEffect.current = TOPOLOGY({
-        el: vantaRef.current,
-        THREE: THREE,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: isDarkMode ? 0x60a5fa : 0x3b82f6,
-        backgroundColor: isDarkMode ? 0x111827 : 0xffffff
-      });
-    }
+    const loadVanta = async () => {
+      if (vantaRef.current && !vantaEffect.current) {
+        const p5Script = document.createElement('script');
+        p5Script.src = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js';
+        p5Script.async = true;
+
+        const vantaScript = document.createElement('script');
+        vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js';
+        vantaScript.async = true;
+
+        p5Script.onload = () => {
+          vantaScript.onload = () => {
+            if ((window as any).VANTA) {
+              vantaEffect.current = (window as any).VANTA.TOPOLOGY({
+                el: vantaRef.current,
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: isDarkMode ? 0x60a5fa : 0x3b82f6,
+                backgroundColor: isDarkMode ? 0x111827 : 0xffffff
+              });
+            }
+          };
+          document.body.appendChild(vantaScript);
+        };
+
+        document.body.appendChild(p5Script);
+      }
+    };
+
+    loadVanta();
+
     return () => {
       if (vantaEffect.current) {
         vantaEffect.current.destroy();
