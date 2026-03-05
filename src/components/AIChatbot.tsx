@@ -225,6 +225,10 @@ const AIChatbot: React.FC = () => {
         <MessageCircle size={24} />
       </motion.button>
 
+      {/* Chat Window Wrapper - allows scrolling with page */}
+      <div className="fixed bottom-6 right-6 z-50 pointer-events-none">
+        <div className="pointer-events-auto">
+
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
@@ -233,7 +237,7 @@ const AIChatbot: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={`fixed bottom-6 right-6 z-50 w-96 h-[600px] rounded-xl shadow-2xl flex flex-col ${
+            className={`w-96 h-[600px] rounded-xl shadow-2xl flex flex-col ${
               isDarkMode
                 ? "bg-gray-900 text-white border border-gray-700"
                 : "bg-white text-gray-900 border border-gray-200"
@@ -330,6 +334,8 @@ const AIChatbot: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+        </div>
+      </div>
     </>
   );
 };
