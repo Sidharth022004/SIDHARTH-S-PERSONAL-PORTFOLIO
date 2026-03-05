@@ -228,9 +228,8 @@ const AIChatbot: React.FC = () => {
       {/* Chat Window Wrapper - allows scrolling with page */}
       <div className="fixed bottom-6 right-6 z-50 pointer-events-none">
         <div className="pointer-events-auto">
-
-      {/* Chat Window */}
-      <AnimatePresence>
+          {/* Chat Window */}
+          <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
